@@ -1,64 +1,48 @@
 let cellSize;
+let terrainMode = false;
+let noisy = false;
 let gridSize = 8;
-let noiseOffset = {
-  x: 0,
-  y: 0
-  }
+let noiseOffset = { x: 0, y: 0 };
 
 function setup() {
   createCanvas(500, 500);
   frameRate(30);
   stroke(255);
   strokeWeight(10);
-  noiseSeed(0);
-  // noStroke();
+  noiseSeed('Gargamel');
   cellSize = width / 8;
-
-
-
-
 }
 
 function draw() {
   background(0);
   isKeyDown();
   drawGrid();
-  // drawNoise();
-  noiseOffset.x+=0.01;
-  noiseOffset.y+=0.01;
+  if(noisy){
+    incrementNoise(0.01);
+  }
+}
+
+function incrementNoise(value){
+  noiseOffset.x+=value;
+  noiseOffset.y+=value;
 }
 
 function drawGrid(){
   for(let i = 0; i < gridSize; i++) {
     for(let k = 0; k < gridSize; k++) {
       let noiseValue = noise(i*0.2 + noiseOffset.x,k*0.2 + noiseOffset.y);
-      // if(noiseValue < 0.33) {
-      //   fill("blue");
-      // } else if(noiseValue >= 0.33 && noiseValue < 0.66) {
-      //   fill("green");
-      // } else if(noiseValue >= 0.67) {
-      //   fill("grey");
-      // }
-      fill(noiseValue*255);
-      rect(i*cellSize,k*cellSize,cellSize,cellSize);
-    }
-  }
-}
-
-function drawNoise(){
-  for(let i = 0; i < width/10; i++) {
-    for(let k = 0; k < height/2; k++) {
-      let noiseValue = noise(i + noiseOffset,k + noiseOffset);
-
-      if(noiseValue < 0.33) {
-        fill("blue");
-      } else if(noiseValue >= 0.33 && noiseValue < 0.66) {
-        fill("green");
-      } else if(noiseValue >= 0.67) {
-        fill("grey");
+      if(terrainMode){
+        if(noiseValue < 0.33) {
+          fill("blue");
+        } else if(noiseValue >= 0.33 && noiseValue < 0.66) {
+          fill("green");
+        } else if(noiseValue >= 0.67) {
+          fill("grey");
+        }
+      } else {
+        fill(noiseValue*255);
       }
-      fill(noiseValue*255);
-      rect(i*10,k*10,10,10);
+      rect(i*cellSize,k*cellSize,cellSize,cellSize);
     }
   }
 }
@@ -72,5 +56,13 @@ function isKeyDown(){
     noiseOffset.y -= 0.05;
   } else if (keyIsDown(DOWN_ARROW)) {
     noiseOffset.y += 0.05;
+  }
+}
+
+function keyTyped() {
+  if (key==='t') {
+    terrainMode = !terrainMode;
+  } else if (key==="n") {
+    noisy = !noisy;
   }
 }
