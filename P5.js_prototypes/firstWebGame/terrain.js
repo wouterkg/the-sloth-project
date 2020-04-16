@@ -33,11 +33,11 @@ function drawGrid(){
       let noiseValue = noise(i*0.2 + noiseOffset.x,k*0.2 + noiseOffset.y);
       if(terrainMode){
         if(noiseValue < 0.33) {
-          fill("blue");
+          fill(80,80,150+noiseValue*255);
         } else if(noiseValue >= 0.33 && noiseValue < 0.66) {
-          fill("green");
+          fill(0,noiseValue*255,0);
         } else if(noiseValue >= 0.67) {
-          fill("grey");
+          fill(noiseValue*255);
         }
       } else {
         fill(noiseValue*255);
@@ -52,7 +52,8 @@ function isKeyDown(){
     noiseOffset.x -= 0.05;
   } else if (keyIsDown(RIGHT_ARROW)) {
     noiseOffset.x += 0.05;
-  } else if (keyIsDown(UP_ARROW)) {
+  }
+  if (keyIsDown(UP_ARROW)) {
     noiseOffset.y -= 0.05;
   } else if (keyIsDown(DOWN_ARROW)) {
     noiseOffset.y += 0.05;
